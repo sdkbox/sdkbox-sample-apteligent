@@ -1,7 +1,16 @@
 
 #include "HelloWorldScene.h"
+#include "PluginApteligent/PluginApteligent.h"
 
 USING_NS_CC;
+
+class CustomListener : public sdkbox::ApteligentListener {
+public:
+
+    void onCrashOnLastLoad() {
+        CCLOG("Apteligent: crashOnLastLoad.");
+    }
+};
 
 Scene* HelloWorld::createScene()
 {
@@ -56,21 +65,51 @@ bool HelloWorld::init()
 
 void HelloWorld::createTestMenu()
 {
-    auto menu = Menu::create();
+    sdkbox::PluginApteligent::setListener(new CustomListener());
 
-    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Test Item 1", "sans", 24), [](Ref*){
-        CCLOG("Test Item 1");
-    }));
+    //
+    // sdkbox::PluginApteligent::sendAppLoadData();
 
-    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Test Item 2", "sans", 24), [](Ref*){
-        CCLOG("Test Item 2");
-    }));
+    // filter
+    sdkbox::PluginApteligent::addFilter("sensitiveURL");
+    sdkbox::PluginApteligent::addFilter("additionalURL");
 
-    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Test Item 3", "sans", 24), [](Ref*){
-        CCLOG("Test Item 3");
-    }));
+    sdkbox::PluginApteligent::setLoggingLevel(sdkbox::CRLoggingLevelInfo);
+    sdkbox::PluginApteligent::setAsyncBreadcrumbMode(true);
+    sdkbox::PluginApteligent::updateLocation(30.67, 104.06);
 
-    menu->alignItemsVerticallyWithPadding(10);
-    addChild(menu);
+    sdkbox::PluginApteligent::setUsername("MrsCritter");
+    sdkbox::PluginApteligent::setValueforKey("5", "Game Level");
+
+    sdkbox::PluginApteligent::leaveBreadcrumb("User tapped start button");
+
+
+    // flow test
+    CCLOG("begin user flow: login");
+    sdkbox::PluginApteligent::beginUserflow("login");
+    float v = cocos2d::random(10, 100);
+    if (v > 50) {
+        CCLOG("end user flow: login");
+        sdkbox::PluginApteligent::setValueforUserflow(int(CCRANDOM_0_1()*10), "login");
+        int value = sdkbox::PluginApteligent::valueForUserflow("login");
+        sdkbox::PluginApteligent::setValueforUserflow(value+5, "login");
+        sdkbox::PluginApteligent::endUserflow("login");
+    } else if (v > 30) {
+        CCLOG("fail user flow: login");
+        sdkbox::PluginApteligent::failUserflow("login");
+    } else {
+        CCLOG("cancel user flow: login");
+        sdkbox::PluginApteligent::cancelUserflow("login");
+    }
+
+
+    // logging network requests
+    sdkbox::PluginApteligent::logNetworkRequest("GET", "http://www.abc123def456.com", 2.0, 1000, 100, 200);
+
+
+    auto size = Director::getInstance()->getWinSize();
+    auto label = Label::createWithSystemFont("see console log", "arial", 64);
+    label->setPosition(size/2);
+    addChild(label);
 }
 
