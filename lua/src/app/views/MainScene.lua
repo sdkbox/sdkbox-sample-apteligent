@@ -18,27 +18,55 @@ function MainScene:onCreate()
 end
 
 function MainScene:setupTestMenu()
-    local label1 = cc.Label:createWithSystemFont("Test Item 1", "sans", 28)
-    local item1 = cc.MenuItemLabel:create(label1)
-    item1:onClicked(function()
-        print("Test Item 1")
-    end)
+    math.randomseed(os.time())
 
-    local label2 = cc.Label:createWithSystemFont("Test Item 2", "sans", 28)
-    local item2 = cc.MenuItemLabel:create(label2)
-    item2:onClicked(function()
-        print("Test Item 2")
-    end)
+    sdkbox.PluginApteligent:init()
+    sdkbox.PluginApteligent:setListener(function(event)
+            dump(event)
+        end)
 
-    local label3 = cc.Label:createWithSystemFont("Test Item 3", "sans", 28)
-    local item3 = cc.MenuItemLabel:create(label3)
-    item3:onClicked(function()
-        print("Test Item 3")
-    end)
+    -- -- sdkbox.PluginApteligent:sendAppLoadData()
 
-    local menu = cc.Menu:create(item1, item2, item3)
-    menu:alignItemsVerticallyWithPadding(24)
-    self:addChild(menu)
+    -- filter
+    sdkbox.PluginApteligent:addFilter("sensitiveURL")
+    sdkbox.PluginApteligent:addFilter("additionalURL")
+
+    dump(sdkbox.PluginApteligent.LoggingLevel)
+    sdkbox.PluginApteligent:setLoggingLevel(sdkbox.PluginApteligent.LoggingLevel.Info)
+    sdkbox.PluginApteligent:setAsyncBreadcrumbMode(true)
+    sdkbox.PluginApteligent:updateLocation(30.67, 104.06)
+
+    sdkbox.PluginApteligent:setUsername("MrsCritter")
+    sdkbox.PluginApteligent:setValueforKey("5", "Game Level")
+
+    sdkbox.PluginApteligent:leaveBreadcrumb("User tapped start button")
+
+
+    -- -- flow test
+    sdkbox.PluginApteligent:beginUserflow("login")
+    local v = math.random(120)
+    if v > 50 then
+        print("end user flow: login")
+        sdkbox.PluginApteligent:setValueforUserflow(math.random(50), "login")
+        local value = sdkbox.PluginApteligent:valueForUserflow("login")
+        sdkbox.PluginApteligent:setValueforUserflow(value+5, "login")
+        sdkbox.PluginApteligent:endUserflow("login")
+    elseif v > 30 then
+        print("fail user flow: login")
+        sdkbox.PluginApteligent:failUserflow("login")
+    else
+        print("cancel user flow: login")
+        sdkbox.PluginApteligent:cancelUserflow("login")
+    end
+
+
+    -- logging network requests
+    sdkbox.PluginApteligent:logNetworkRequest("GET", "http://www.abc123def456.com", 2.0, 1000, 100, 200)
+
+
+    cc.Label:createWithSystemFont("See console log", "sans", 64)
+        :setPosition(display.cx, display.cy)
+        :addTo(self)
 end
 
 return MainScene
