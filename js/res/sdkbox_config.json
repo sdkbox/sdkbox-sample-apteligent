@@ -1,0 +1,31 @@
+{
+    "android": {
+        "Apteligent": {
+            "logcat_reporting_enabled": true, 
+            "enable_service_monitoring": false, 
+            "version": "v0.0.1", 
+            "debug": true, 
+            "delay_sending_appload": false, 
+            "url_filters": [
+                "https://metrics.sdkbox.com", 
+                "http://www.gmail.com"
+            ], 
+            "id": "3f66168979494ce38374b4d32d637dcc00555300", 
+            "version_string_include_version_code": true
+        }
+    }, 
+    "ios": {
+        "Apteligent": {
+            "enable_service_monitoring": true, 
+            "monitor_session": true, 
+            "monitor_connection": true, 
+            "debug": true, 
+            "delay_sending_appload": false, 
+            "url_filters": [
+                "https://metrics.sdkbox.com", 
+                "http://www.gmail.com"
+            ], 
+            "id": "956194d922984692a3184816ec3a510300555300"
+        }
+    }
+}
