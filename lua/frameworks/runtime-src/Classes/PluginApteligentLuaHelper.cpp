@@ -1,8 +1,6 @@
 
 #include "PluginApteligentLuaHelper.h"
 #include "PluginApteligent/PluginApteligent.h"
-#include "CCLuaEngine.h"
-#include "tolua_fix.h"
 #include "SDKBoxLuaHelper.h"
 
 class ApteligentListenerLua : public sdkbox::ApteligentListener {
