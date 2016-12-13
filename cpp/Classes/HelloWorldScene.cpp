@@ -108,8 +108,28 @@ void HelloWorld::createTestMenu()
 
 
     auto size = Director::getInstance()->getWinSize();
-    auto label = Label::createWithSystemFont("see console log", "arial", 64);
-    label->setPosition(size/2);
+    auto label = Label::createWithSystemFont("see console log for more detail", "arial", 32);
+    label->setPosition(Vec2(size.width/2, 100));
     addChild(label);
+    
+    MenuItemFont::setFontSize(48);
+    
+    Menu *menu = Menu::create(MenuItemFont::create("Test Crash 1", CC_CALLBACK_1(HelloWorld::onCreateCrash, this)),
+                              MenuItemFont::create("Test Crash 2", CC_CALLBACK_1(HelloWorld::onCreateCrash2, this)),
+                              NULL);
+    menu->alignItemsVerticallyWithPadding(5);
+    menu->setPosition(Vec2(size.width/2, size.height/2));
+    
+    addChild(menu);
 }
 
+void HelloWorld::onCreateCrash(cocos2d::Ref* sender)
+{
+    Node* empty_node;
+    empty_node->getName();
+}
+
+void HelloWorld::onCreateCrash2(cocos2d::Ref* sender)
+{
+    int infinity = 1/0;
+}

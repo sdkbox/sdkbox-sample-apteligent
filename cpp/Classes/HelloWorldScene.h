@@ -17,7 +17,8 @@ public:
 
 private:
     void createTestMenu();
-
+    void onCreateCrash(cocos2d::Ref* sender);
+    void onCreateCrash2(cocos2d::Ref* sender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__
