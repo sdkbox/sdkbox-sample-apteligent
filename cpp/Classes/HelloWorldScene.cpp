@@ -4,6 +4,41 @@
 
 USING_NS_CC;
 
+using namespace std;
+
+std::vector<std::string> msgbuf;
+static void showMsg(const std::string& msg) {
+    //
+    Label *label = dynamic_cast<Label*>(Director::getInstance()->getNotificationNode());
+    if (label == nullptr) {
+        auto size = Director::getInstance()->getWinSize();
+        label = Label::createWithSystemFont("test", "arial", 16);
+        label->setAnchorPoint(ccp(0,0));
+        label->setTextColor(Color4B(0, 255, 0, 255));
+        label->setPosition(10, size.height*0.1);
+        Director::getInstance()->setNotificationNode(label);
+    }
+
+    static int index = 0;
+    stringstream buf;
+    buf << (index++) << " " << msg;
+    msgbuf.push_back(buf.str());
+    if (msgbuf.size() > 10) {
+        msgbuf.erase(msgbuf.cbegin());
+    }
+
+
+    std::string text = "";
+
+    for (int i = 0; i < msgbuf.size(); i++) {
+        stringstream buf;
+        buf << msgbuf[i] << "\n";
+        text = text + buf.str();
+    }
+
+    label->setString(text);
+}
+
 class CustomListener : public sdkbox::ApteligentListener {
 public:
 
@@ -119,6 +154,10 @@ void HelloWorld::createTestMenu()
                               NULL);
     menu->alignItemsVerticallyWithPadding(5);
     menu->setPosition(Vec2(size.width/2, size.height/2));
+
+    stringstream buf;
+    buf << (sdkbox::PluginApteligent::didCrashOnLastLoad() ? "crashed" : "no crash");
+    showMsg(buf.str());
     
     addChild(menu);
 }

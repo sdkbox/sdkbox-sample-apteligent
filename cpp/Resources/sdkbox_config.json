@@ -2,16 +2,14 @@
     "android": {
         "Apteligent": {
             "logcat_reporting_enabled": true, 
-            "enable_service_monitoring": false, 
-            "version": "v0.0.1", 
+            "enable_service_monitoring": false,  
             "debug": true, 
             "delay_sending_appload": false, 
             "url_filters": [
                 "https://metrics.sdkbox.com", 
                 "http://www.gmail.com"
             ], 
-            "id": "3f66168979494ce38374b4d32d637dcc00555300", 
-            "version_string_include_version_code": true
+            "id": "3f66168979494ce38374b4d32d637dcc00555300"
         }
     }, 
     "ios": {
